@@ -1,0 +1,47 @@
+@import "./variables";
+
+.container {
+  max-width: 1152px;
+  margin: 0 auto;
+  padding: 0 0.75rem;
+}
+.block {
+  display: block;
+}
+.flex {
+  display: flex;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.align-center {
+  align-items: center;
+}
+.h-full {
+  height: 100%;
+}
+.w-full {
+  width: 100%;
+}
+.text-primary {
+  color: $primary;
+}
+.text-white {
+  color: $white;
+}
+.text-black {
+  color: #000;
+}
+.mt-4 {
+  margin-top: 1rem;
+}
+.mx-4 {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+.mr-10px {
+  margin-right: 10px;
+}

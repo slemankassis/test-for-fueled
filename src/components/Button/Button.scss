@@ -1,0 +1,34 @@
+@import "src/styles/variables";
+
+.app-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  border-radius: $border-radius;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  line-height: 13px;
+  height: 2.5rem;
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  &--contained {
+    background-color: $primary;
+    border: 1px solid $primary;
+    color: $white;
+  }
+  &--outlined {
+    border: 1px solid $outline;
+  }
+  &--primary {
+    color: 1px solid $primary;
+  }
+  &--fullwidth {
+    width: 100%;
+  }
+}
