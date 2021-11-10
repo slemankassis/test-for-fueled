@@ -34,7 +34,7 @@ const Button: React.FC<ButtonProps> = ({
 
 Button.defaultProps = {
   variant: "contained",
-  color: "primary",
+  color: "default",
 };
 
 export default Button;

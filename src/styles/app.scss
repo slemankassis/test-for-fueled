@@ -1,5 +1,43 @@
 @import "./variables";
 
+.header {
+  &__input {
+    border: none;
+    outline: none;
+    font-weight: 700;
+    font-size: 22px;
+    background-color: transparent;
+    text-align: center;
+    color: $white;
+    min-width: 0px;
+    padding: 0px 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  &__button {
+    background-color: rgba($color: #f5f5f1, $alpha: 0.2);
+  }
+}
+.main {
+  &__action-icon {
+    cursor: pointer;
+    margin-left: 1.875rem;
+  }
+  &__counter {
+    font-size: 14px;
+  }
+}
+.card {
+  padding: 1.5rem;
+  background-color: $white;
+  border-radius: $border-radius;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
+}
+.divider {
+  background-color: #f5f5f1;
+  height: 1px;
+}
 .container {
   max-width: 1152px;
   margin: 0 auto;
@@ -32,15 +70,33 @@
 .text-white {
   color: $white;
 }
+.text-muted {
+  color: $muted;
+}
 .text-black {
   color: #000;
 }
 .mt-4 {
   margin-top: 1rem;
 }
+.mt-8 {
+  margin-top: 2rem;
+}
+.mb-4 {
+  margin-bottom: 1rem;
+}
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+.mb-8 {
+  margin-bottom: 2rem;
+}
 .mx-4 {
   margin-left: 1rem;
   margin-right: 1rem;
+}
+.mr-2 {
+  margin-right: 0.5rem;
 }
 .mr-10px {
   margin-right: 10px;
