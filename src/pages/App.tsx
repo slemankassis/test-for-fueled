@@ -4,7 +4,6 @@ import Button from "src/components/Button/Button";
 import Checkbox from "src/components/Checkbox/Checkbox";
 import Radio from "src/components/Radio/Radio";
 import Select from "src/components/Select/Select";
-import Stepper from "src/components/Stepper/Stepper";
 import TextArea from "src/components/TextArea/TextArea";
 import TextField from "src/components/TextField/TextField";
 import { v4 as uuidv4 } from "uuid";
@@ -56,9 +55,10 @@ const App = () => {
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
+    const temp = [...formData];
+
     console.log(
-      formData.map((data) => {
-        delete data.answerType;
+      temp.map(({ answerType, ...data }) => {
         return data;
       })
     );
@@ -215,7 +215,6 @@ const App = () => {
             className="mb-4"
             variant="outlined"
             color="primary"
-            type="button"
             fullwidth
             onClick={handleAddQuestion}
           >
@@ -225,7 +224,6 @@ const App = () => {
           <Button className="mb-4" variant="contained" type="submit" fullwidth>
             Save & Share
           </Button>
-          <Stepper />
         </form>
       </main>
     </Fragment>
