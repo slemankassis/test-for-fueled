@@ -5,7 +5,7 @@ import "./Select.scss";
 
 type Option = {
   label: string;
-  value: string;
+  value: string | number;
 };
 type SelectProps = {
   className?: string;
@@ -13,6 +13,7 @@ type SelectProps = {
   options: Option[];
   label?: string;
   style?: React.CSSProperties;
+  value?: Option;
   onChange?: (value: Option) => void;
 };
 
@@ -22,20 +23,22 @@ const Select: React.FC<SelectProps> = ({
   fullwidth,
   options,
   label,
+  value,
   style,
   onChange,
 }) => {
-  const [selected, setSelected] = useState<string>("");
+  const [selected, setSelected] = useState<Option | undefined>();
 
   useEffect(() => {
-    setSelected(children as string);
-  }, [children]);
+    setSelected(value);
+  }, [value]);
 
-  const handleSelectOption = (option: Option) => () => {
+  const handleSelectOption = (option: Option) => (event: any) => {
+    event.preventDefault();
     if (onChange) {
       onChange(option);
     } else {
-      setSelected(option.label);
+      setSelected(option);
     }
   };
 
@@ -43,12 +46,13 @@ const Select: React.FC<SelectProps> = ({
     <div
       className={clsx({
         "app-select": true,
+        "app-select--fullwidth": fullwidth,
         [className]: true,
       })}
       style={style}
     >
       <label>{label}</label>
-      <Dropdown title={selected} fullwidth>
+      <Dropdown title={selected?.label || (children as string)} fullwidth>
         {options.map((item, ind) => (
           <li onClick={handleSelectOption(item)} key={ind}>
             {item.label}

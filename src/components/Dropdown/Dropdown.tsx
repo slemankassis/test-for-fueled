@@ -35,6 +35,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       <Button
         className="app-dropdown__button"
         variant="outlined"
+        type="button"
         fullwidth
         onClick={toggleDropdown}
       >

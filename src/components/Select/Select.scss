@@ -3,6 +3,9 @@
 .app-select {
   display: inline-block;
   min-width: 270px;
+  &--fullwidth {
+    width: 100%;
+  }
   label {
     color: $black;
     font-size: 0.75rem;

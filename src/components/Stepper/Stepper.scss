@@ -1,0 +1,9 @@
+@import "src/styles/variables";
+
+.app-stepper {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 0.875rem;
+  padding-right: 0.875rem;
+  min-width: 120px;
+}
