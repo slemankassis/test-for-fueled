@@ -1,4 +1,5 @@
 import React, { ChangeEvent, Fragment, useState } from "react";
+import { BrowserRouter, Link } from "react-router-dom";
 import AppBar from "src/components/AppBar/AppBar";
 import Button from "src/components/Button/Button";
 import Checkbox from "src/components/Checkbox/Checkbox";
@@ -16,6 +17,7 @@ type Option = {
 
 const App = () => {
   const [formData, setFormData] = useState<any[]>([defaultFormData]);
+  const [user, setUser] = useState<string | null>(null);
 
   const setFormDataItem = (
     index: number,
@@ -53,6 +55,20 @@ const App = () => {
     setFormData([...formData.filter((data) => data.id !== id)]);
   };
 
+  const handleMove = (index: number, move: "up" | "down") => () => {
+    if (move === "down") {
+      const temp = [...formData];
+      temp[index] = formData[index + 1];
+      temp[index + 1] = formData[index];
+      setFormData(temp);
+    } else {
+      const temp = [...formData];
+      temp[index] = formData[index - 1];
+      temp[index - 1] = formData[index];
+      setFormData(temp);
+    }
+  };
+
   const handleSubmit = (event: any) => {
     event.preventDefault();
     const temp = [...formData];
@@ -65,17 +81,52 @@ const App = () => {
     alert("Submitted");
   };
 
+  const handleLogin = async () => {
+    setUser("mock@gmail.com");
+  };
+  const handleLogout = async () => {
+    setUser(null);
+  };
+
   return (
-    <Fragment>
+    <BrowserRouter>
       <AppBar>
         <div className="header container flex justify-between align-center h-full">
-          <img src="/assets/icons/logo.svg" alt="logo" />
+          <Link to="/">
+            <img
+              src="/assets/icons/logo.svg"
+              alt="logo"
+              tabIndex={0}
+              role="link"
+              aria-label="Home"
+            />
+          </Link>
           <input
             className="header__input"
             type="text"
-            defaultValue="Questions about Latin"
+            defaultValue="New Questionnaire"
+            aria-label="Title field"
           />
-          <Button className="header__button">Login</Button>
+          <div className="flex align-center">
+            {user && <span className="main__user">{user}</span>}
+            {user ? (
+              <Button
+                className="header__button"
+                aria-label="logout"
+                onClick={handleLogout}
+              >
+                Logout
+              </Button>
+            ) : (
+              <Button
+                className="header__button"
+                aria-label="login"
+                onClick={handleLogin}
+              >
+                Login
+              </Button>
+            )}
+          </div>
         </div>
       </AppBar>
       <main className="main container mt-8">
@@ -87,6 +138,7 @@ const App = () => {
                 name="question"
                 label="Question"
                 placeholder="Lorem ipsum dolor sit amet?"
+                aria-label="question"
                 fullwidth
                 onChange={handleChange(index)}
               />
@@ -94,6 +146,7 @@ const App = () => {
               <Select
                 className="mb-4"
                 label="Answer"
+                aria-label="select answer type"
                 value={data.answerType}
                 options={options}
                 onChange={handleSelectionChange(index)}
@@ -105,15 +158,18 @@ const App = () => {
                 <TextField
                   className="mb-4"
                   name="short_answer"
-                  placeholder="Short answer text"
+                  placeholder="Short Answer Text"
+                  aria-label="Short Answer"
                   fullwidth
                   onChange={handleChange(index)}
                 />
               )}
               {data.answerType.value === 2 && (
                 <TextArea
-                  name="paragraph"
+                  name="long_answer"
+                  placeholder="Long Answer Text"
                   fullwidth
+                  aria-label="long answer"
                   onChange={handleChange(index)}
                 />
               )}
@@ -121,20 +177,32 @@ const App = () => {
                 <Fragment>
                   <div className="flex items-center mb-4 w-full">
                     <Radio name="radio-name" />
-                    <TextField className="mx-4" fullwidth />
+                    <TextField
+                      className="mx-4"
+                      placeholder="First Option"
+                      fullwidth
+                    />
                     <img
                       className="cursor-pointer"
                       src="/assets/icons/cross.svg"
                       alt="cross"
+                      role="button"
+                      tabIndex={0}
                     />
                   </div>
                   <div className="flex items-center mb-4 w-full">
                     <Radio name="radio-name" />
-                    <TextField className="mx-4" fullwidth />
+                    <TextField
+                      className="mx-4"
+                      placeholder="Second Option"
+                      fullwidth
+                    />
                     <img
                       className="cursor-pointer"
                       src="/assets/icons/cross.svg"
                       alt="cross"
+                      role="button"
+                      tabIndex={0}
                     />
                   </div>
                   <Button
@@ -158,14 +226,15 @@ const App = () => {
                     <Checkbox />
                     <TextField
                       className="mx-4"
-                      name="paragraph"
-                      placeholder=""
+                      placeholder="First Option"
                       fullwidth
                     />
                     <img
                       className="cursor-pointer"
                       src="/assets/icons/cross.svg"
                       alt="cross"
+                      role="button"
+                      tabIndex={0}
                     />
                   </div>
                   <Button
@@ -183,6 +252,39 @@ const App = () => {
                   </Button>
                 </Fragment>
               )}
+              {data.answerType.value === 5 && (
+                <Fragment>
+                  <div className="flex align-center mb-4 w-full">
+                    <span className="block text-muted">1.</span>
+                    <TextField
+                      className="mx-4"
+                      placeholder="First Option"
+                      fullwidth
+                    />
+                    <img
+                      className="cursor-pointer"
+                      src="/assets/icons/cross.svg"
+                      alt="cross"
+                      role="button"
+                      tabIndex={0}
+                    />
+                  </div>
+                  <Button
+                    className="mb-4"
+                    variant="outlined"
+                    color="primary"
+                    fullwidth
+                    aria-label="add new option"
+                  >
+                    <img
+                      className="mr-2"
+                      src="/assets/icons/plus.svg"
+                      alt="plus"
+                    />
+                    <span>Add Option</span>
+                  </Button>
+                </Fragment>
+              )}
 
               <div className="divider mb-6" />
               <div className="flex justify-between align-center">
@@ -190,20 +292,37 @@ const App = () => {
                   {index + 1} / {formData.length}
                 </span>
                 <div className="flex align-center">
-                  <img
-                    className="main__action-icon"
-                    src="/assets/icons/chevron-up.svg"
-                    alt="chevron-up"
-                  />
-                  <img
-                    className="main__action-icon"
-                    src="/assets/icons/chevron-down.svg"
-                    alt="chevron-down"
-                  />
+                  {index !== 0 && (
+                    <img
+                      className="main__action-icon"
+                      src="/assets/icons/chevron-up.svg"
+                      alt="chevron-up"
+                      role="button"
+                      aria-label="move question up"
+                      tabIndex={0}
+                      onClick={handleMove(index, "up")}
+                      onKeyPress={handleMove(index, "up")}
+                    />
+                  )}
+                  {index !== formData.length - 1 && (
+                    <img
+                      className="main__action-icon"
+                      src="/assets/icons/chevron-down.svg"
+                      alt="chevron-down"
+                      role="button"
+                      aria-label="move question down"
+                      tabIndex={0}
+                      onClick={handleMove(index, "down")}
+                      onKeyPress={handleMove(index, "down")}
+                    />
+                  )}
                   <img
                     className="main__action-icon"
                     src="/assets/icons/bin.svg"
                     alt="bin"
+                    role="button"
+                    tabIndex={0}
+                    onKeyPress={handleRemoveQuestion(data.id)}
                     onClick={handleRemoveQuestion(data.id)}
                   />
                 </div>
@@ -216,23 +335,33 @@ const App = () => {
             variant="outlined"
             color="primary"
             fullwidth
+            aria-label="add question"
+            disabled={formData.some((data) => !data.question)}
             onClick={handleAddQuestion}
+            onKeyPress={handleAddQuestion}
           >
             <img className="mr-2" src="/assets/icons/plus.svg" alt="plus" />
             <span>Add Question</span>
           </Button>
-          <Button className="mb-4" variant="contained" type="submit" fullwidth>
+          <Button
+            className="mb-4"
+            variant="contained"
+            type="submit"
+            aria-label="submit form"
+            disabled={formData.some((data) => !data.question)}
+            fullwidth
+          >
             Save & Share
           </Button>
         </form>
       </main>
-    </Fragment>
+    </BrowserRouter>
   );
 };
 
 const options = [
   {
-    label: "Short Answer Text",
+    label: "Short Answer",
     value: 1,
   },
   {
@@ -246,6 +375,10 @@ const options = [
   {
     label: "Checkboxes",
     value: 4,
+  },
+  {
+    label: "List Answer",
+    value: 5,
   },
 ];
 

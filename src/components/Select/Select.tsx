@@ -54,7 +54,13 @@ const Select: React.FC<SelectProps> = ({
       <label>{label}</label>
       <Dropdown title={selected?.label || (children as string)} fullwidth>
         {options.map((item, ind) => (
-          <li onClick={handleSelectOption(item)} key={ind}>
+          <li
+            onClick={handleSelectOption(item)}
+            onKeyPress={handleSelectOption(item)}
+            tabIndex={0}
+            role="button"
+            key={ind}
+          >
             {item.label}
           </li>
         ))}

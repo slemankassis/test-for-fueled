@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../Button/Button";
 import "./Dropdown.scss";
 
@@ -23,6 +23,21 @@ const Dropdown: React.FC<DropdownProps> = ({
     setOpen(!open);
   };
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const key = event.key || event.keyCode;
+      if (key === "Escape" || key === "Esc" || key === 27) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown, false);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
     <div
       className={clsx({
@@ -33,9 +48,8 @@ const Dropdown: React.FC<DropdownProps> = ({
       style={style}
     >
       <Button
-        className="app-dropdown__button"
+        className="app-dropdown__button text-transform-none"
         variant="outlined"
-        type="button"
         fullwidth
         onClick={toggleDropdown}
       >
@@ -50,7 +64,11 @@ const Dropdown: React.FC<DropdownProps> = ({
         />
       </Button>
       {open && (
-        <div className="app-dropdown__menu" onClick={toggleDropdown}>
+        <div
+          className="app-dropdown__menu"
+          onClick={toggleDropdown}
+          onKeyPress={toggleDropdown}
+        >
           {children}
         </div>
       )}

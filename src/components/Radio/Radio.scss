@@ -26,6 +26,9 @@
     border: 2px solid $gray-light;
     position: relative;
 
+    &:focus {
+      border: 2px solid $primary;
+    }
     &:checked {
       border: 2px solid $primary;
       &:after {

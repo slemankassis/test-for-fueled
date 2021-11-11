@@ -13,6 +13,10 @@
   font-weight: 700;
   line-height: 13px;
   height: 2.5rem;
+  text-transform: uppercase;
+  &:focus {
+    border: 1px solid $primary;
+  }
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
