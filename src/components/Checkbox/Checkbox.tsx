@@ -22,9 +22,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
 
   return (
     <div
-      className={clsx({
-        [`${className}`]: true,
-        "app-checkbox": true,
+      className={clsx(className, "app-checkbox", {
         "app-checkbox--fullwidth": fullwidth,
       })}
       style={style}

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Fragment, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { BrowserRouter, Link } from "react-router-dom";
 import AppBar from "src/components/AppBar/AppBar";
 import Button from "src/components/Button/Button";
@@ -154,137 +154,147 @@ const App = () => {
                 Select an option
               </Select>
 
-              {data.answerType.value === 1 && (
-                <TextField
-                  className="mb-4"
-                  name="short_answer"
-                  placeholder="Short Answer Text"
-                  aria-label="Short Answer"
-                  fullwidth
-                  onChange={handleChange(index)}
-                />
-              )}
-              {data.answerType.value === 2 && (
-                <TextArea
-                  name="long_answer"
-                  placeholder="Long Answer Text"
-                  fullwidth
-                  aria-label="long answer"
-                  onChange={handleChange(index)}
-                />
-              )}
-              {data.answerType.value === 3 && (
-                <Fragment>
-                  <div className="flex items-center mb-4 w-full">
-                    <Radio name="radio-name" />
-                    <TextField
-                      className="mx-4"
-                      placeholder="First Option"
-                      fullwidth
-                    />
-                    <img
-                      className="cursor-pointer"
-                      src="/assets/icons/cross.svg"
-                      alt="cross"
-                      role="button"
-                      tabIndex={0}
-                    />
-                  </div>
-                  <div className="flex items-center mb-4 w-full">
-                    <Radio name="radio-name" />
-                    <TextField
-                      className="mx-4"
-                      placeholder="Second Option"
-                      fullwidth
-                    />
-                    <img
-                      className="cursor-pointer"
-                      src="/assets/icons/cross.svg"
-                      alt="cross"
-                      role="button"
-                      tabIndex={0}
-                    />
-                  </div>
-                  <Button
-                    className="mb-4"
-                    variant="outlined"
-                    color="primary"
-                    fullwidth
-                  >
-                    <img
-                      className="mr-2"
-                      src="/assets/icons/plus.svg"
-                      alt="plus"
-                    />
-                    <span>Add Option</span>
-                  </Button>
-                </Fragment>
-              )}
-              {data.answerType.value === 4 && (
-                <Fragment>
-                  <div className="flex items-center mb-4 w-full">
-                    <Checkbox />
-                    <TextField
-                      className="mx-4"
-                      placeholder="First Option"
-                      fullwidth
-                    />
-                    <img
-                      className="cursor-pointer"
-                      src="/assets/icons/cross.svg"
-                      alt="cross"
-                      role="button"
-                      tabIndex={0}
-                    />
-                  </div>
-                  <Button
-                    className="mb-4"
-                    variant="outlined"
-                    color="primary"
-                    fullwidth
-                  >
-                    <img
-                      className="mr-2"
-                      src="/assets/icons/plus.svg"
-                      alt="plus"
-                    />
-                    <span>Add Option</span>
-                  </Button>
-                </Fragment>
-              )}
-              {data.answerType.value === 5 && (
-                <Fragment>
-                  <div className="flex align-center mb-4 w-full">
-                    <span className="block text-muted">1.</span>
-                    <TextField
-                      className="mx-4"
-                      placeholder="First Option"
-                      fullwidth
-                    />
-                    <img
-                      className="cursor-pointer"
-                      src="/assets/icons/cross.svg"
-                      alt="cross"
-                      role="button"
-                      tabIndex={0}
-                    />
-                  </div>
-                  <Button
-                    className="mb-4"
-                    variant="outlined"
-                    color="primary"
-                    fullwidth
-                    aria-label="add new option"
-                  >
-                    <img
-                      className="mr-2"
-                      src="/assets/icons/plus.svg"
-                      alt="plus"
-                    />
-                    <span>Add Option</span>
-                  </Button>
-                </Fragment>
-              )}
+              {(() => {
+                switch (data.answerType.value) {
+                  default:
+                  case 1:
+                    return (
+                      <TextField
+                        className="mb-4"
+                        name="short_answer"
+                        placeholder="Short Answer Text"
+                        aria-label="Short Answer"
+                        fullwidth
+                        onChange={handleChange(index)}
+                      />
+                    );
+                  case 2:
+                    return (
+                      <TextArea
+                        name="long_answer"
+                        placeholder="Long Answer Text"
+                        fullwidth
+                        aria-label="long answer"
+                        onChange={handleChange(index)}
+                      />
+                    );
+                  case 3:
+                    return (
+                      <>
+                        <div className="flex items-center mb-4 w-full">
+                          <Radio name="radio-name" />
+                          <TextField
+                            className="mx-4"
+                            placeholder="First Option"
+                            fullwidth
+                          />
+                          <img
+                            className="cursor-pointer"
+                            src="/assets/icons/cross.svg"
+                            alt="cross"
+                            role="button"
+                            tabIndex={0}
+                          />
+                        </div>
+                        <div className="flex items-center mb-4 w-full">
+                          <Radio name="radio-name" />
+                          <TextField
+                            className="mx-4"
+                            placeholder="Second Option"
+                            fullwidth
+                          />
+                          <img
+                            className="cursor-pointer"
+                            src="/assets/icons/cross.svg"
+                            alt="cross"
+                            role="button"
+                            tabIndex={0}
+                          />
+                        </div>
+                        <Button
+                          className="mb-4"
+                          variant="outlined"
+                          color="primary"
+                          fullwidth
+                        >
+                          <img
+                            className="mr-2"
+                            src="/assets/icons/plus.svg"
+                            alt="plus"
+                          />
+                          <span>Add Option</span>
+                        </Button>
+                      </>
+                    );
+                  case 4:
+                    return (
+                      <>
+                        <div className="flex items-center mb-4 w-full">
+                          <Checkbox />
+                          <TextField
+                            className="mx-4"
+                            placeholder="First Option"
+                            fullwidth
+                          />
+                          <img
+                            className="cursor-pointer"
+                            src="/assets/icons/cross.svg"
+                            alt="cross"
+                            role="button"
+                            tabIndex={0}
+                          />
+                        </div>
+                        <Button
+                          className="mb-4"
+                          variant="outlined"
+                          color="primary"
+                          fullwidth
+                        >
+                          <img
+                            className="mr-2"
+                            src="/assets/icons/plus.svg"
+                            alt="plus"
+                          />
+                          <span>Add Option</span>
+                        </Button>
+                      </>
+                    );
+                  case 5:
+                    return (
+                      <>
+                        <div className="flex align-center mb-4 w-full">
+                          <span className="block text-muted">1.</span>
+                          <TextField
+                            className="mx-4"
+                            placeholder="First Option"
+                            fullwidth
+                          />
+                          <img
+                            className="cursor-pointer"
+                            src="/assets/icons/cross.svg"
+                            alt="cross"
+                            role="button"
+                            tabIndex={0}
+                          />
+                        </div>
+                        <Button
+                          className="mb-4"
+                          variant="outlined"
+                          color="primary"
+                          fullwidth
+                          aria-label="add new option"
+                        >
+                          <img
+                            className="mr-2"
+                            src="/assets/icons/plus.svg"
+                            alt="plus"
+                          />
+                          <span>Add Option</span>
+                        </Button>
+                      </>
+                    );
+                }
+              })()}
 
               <div className="divider mb-6" />
               <div className="flex justify-between align-center">

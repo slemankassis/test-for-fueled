@@ -40,10 +40,8 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   return (
     <div
-      className={clsx({
-        "app-dropdown": true,
+      className={clsx("app-dropdown", className, {
         "app-dropdown--fullwidth": fullwidth,
-        [className]: true,
       })}
       style={style}
     >

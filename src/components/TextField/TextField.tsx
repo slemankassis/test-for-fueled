@@ -38,17 +38,14 @@ const TextField: React.FC<TextFieldProps> = ({
 
   return (
     <div
-      className={clsx({
-        [`${className}`]: true,
-        "app-text-field": true,
+      className={clsx(className, "app-text-field", {
         "app-text-field--fullwidth": fullwidth,
       })}
       style={style}
     >
       {label && <label htmlFor={customId}>{label}</label>}
       <div
-        className={clsx({
-          "app-text-field__input-wrapper": true,
+        className={clsx("app-text-field__input-wrapper", {
           "app-text-field__input-wrapper--focus": isOnFocus,
         })}
       >

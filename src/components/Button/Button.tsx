@@ -18,13 +18,15 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   return (
     <button
-      className={clsx({
-        "app-button": true,
-        [`app-button--${variant}`]: true,
-        [`app-button--${color}`]: true,
-        "app-button--fullwidth": fullwidth,
-        [`${className}`]: true,
-      })}
+      className={clsx(
+        "app-button",
+        `app-button--${variant}`,
+        `app-button--${color}`,
+        className,
+        {
+          "app-button--fullwidth": fullwidth,
+        }
+      )}
       {...props}
     >
       {children}

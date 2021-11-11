@@ -22,9 +22,7 @@ const Radio: React.FC<RadioProps> = ({
 
   return (
     <div
-      className={clsx({
-        [`${className}`]: true,
-        "app-radio": true,
+      className={clsx(className, "app-radio", {
         "app-radio--fullwidth": fullwidth,
       })}
       style={style}
