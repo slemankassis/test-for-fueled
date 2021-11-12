@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 import { BrowserRouter, Link } from "react-router-dom";
+import converter from "number-to-words";
 import AppBar from "src/components/AppBar/AppBar";
 import Button from "src/components/Button/Button";
 import Checkbox from "src/components/Checkbox/Checkbox";
@@ -15,9 +16,16 @@ type Option = {
   value: string | number;
 };
 
+type AnswerOption = {
+  id: string;
+  value: string | number;
+};
+
 const App = () => {
   const [formData, setFormData] = useState<any[]>([defaultFormData]);
   const [user, setUser] = useState<string | null>(null);
+
+  console.log(formData, "formData");
 
   const setFormDataItem = (
     index: number,
@@ -53,6 +61,56 @@ const App = () => {
 
   const handleRemoveQuestion = (id: string) => () => {
     setFormData([...formData.filter((data) => data.id !== id)]);
+  };
+
+  const setFormDataItemAnswerOption = (
+    index: number,
+    anwserOptionIndex: number,
+    value: string
+  ) => {
+    const temp = [...formData];
+
+    temp[index].answerOptions[anwserOptionIndex].value = value;
+    setFormData(temp);
+  };
+
+  const handleChangeAnswerOption =
+    (index: number, anwserOptionIndex: number) =>
+    ({
+      target: { value },
+    }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setFormDataItemAnswerOption(index, anwserOptionIndex, value);
+    };
+
+  const handleAddAnswerOption = (index: number) => () => {
+    const temp = [...formData];
+    temp[index].answerOptions.push({
+      id: uuidv4(),
+      value: "",
+    });
+    setFormData(temp);
+  };
+
+  const setAnswerOption = (
+    index: number,
+    name: string,
+    value: string | Option
+  ) => {
+    const temp = [...formData];
+    temp[index][name] = value;
+    setFormData(temp);
+  };
+
+  const handleRemoveAnswerOption = (index: number, id: string) => () => {
+    const temp = [...formData];
+    const tempAnswerOptions = [
+      ...formData[index].answerOptions.filter(
+        (data: AnswerOption) => data.id !== id
+      ),
+    ];
+
+    temp[index].answerOptions = tempAnswerOptions;
+    setFormData(temp);
   };
 
   const handleMove = (index: number, move: "up" | "down") => () => {
@@ -181,41 +239,53 @@ const App = () => {
                   case 3:
                     return (
                       <>
-                        <div className="flex items-center mb-4 w-full">
-                          <Radio name="radio-name" />
-                          <TextField
-                            className="mx-4"
-                            placeholder="First Option"
-                            fullwidth
-                          />
-                          <img
-                            className="cursor-pointer"
-                            src="/assets/icons/cross.svg"
-                            alt="cross"
-                            role="button"
-                            tabIndex={0}
-                          />
-                        </div>
-                        <div className="flex items-center mb-4 w-full">
-                          <Radio name="radio-name" />
-                          <TextField
-                            className="mx-4"
-                            placeholder="Second Option"
-                            fullwidth
-                          />
-                          <img
-                            className="cursor-pointer"
-                            src="/assets/icons/cross.svg"
-                            alt="cross"
-                            role="button"
-                            tabIndex={0}
-                          />
-                        </div>
+                        {formData[index].answerOptions.map(
+                          (
+                            answerOption: AnswerOption,
+                            anwserOptionIndex: number
+                          ) => (
+                            <div
+                              key={answerOption.id}
+                              className="flex items-center mb-4 w-full"
+                            >
+                              <Radio name="radio-name" />
+                              <TextField
+                                className="mx-4"
+                                placeholder={`${converter.toWordsOrdinal(
+                                  anwserOptionIndex + 1
+                                )} Option`}
+                                fullwidth
+                                onChange={handleChangeAnswerOption(
+                                  index,
+                                  anwserOptionIndex
+                                )}
+                              />
+                              <img
+                                className="cursor-pointer"
+                                src="/assets/icons/cross.svg"
+                                alt="cross"
+                                role="button"
+                                tabIndex={0}
+                                onClick={handleRemoveAnswerOption(
+                                  index,
+                                  answerOption.id
+                                )}
+                                onKeyPress={handleRemoveAnswerOption(
+                                  index,
+                                  answerOption.id
+                                )}
+                              />
+                            </div>
+                          )
+                        )}
                         <Button
                           className="mb-4"
                           variant="outlined"
                           color="primary"
                           fullwidth
+                          aria-label="Add new option"
+                          onKeyPress={handleAddAnswerOption(index)}
+                          onClick={handleAddAnswerOption(index)}
                         >
                           <img
                             className="mr-2"
@@ -229,26 +299,53 @@ const App = () => {
                   case 4:
                     return (
                       <>
-                        <div className="flex items-center mb-4 w-full">
-                          <Checkbox />
-                          <TextField
-                            className="mx-4"
-                            placeholder="First Option"
-                            fullwidth
-                          />
-                          <img
-                            className="cursor-pointer"
-                            src="/assets/icons/cross.svg"
-                            alt="cross"
-                            role="button"
-                            tabIndex={0}
-                          />
-                        </div>
+                        {formData[index].answerOptions.map(
+                          (
+                            answerOption: AnswerOption,
+                            anwserOptionIndex: number
+                          ) => (
+                            <div
+                              key={answerOption.id}
+                              className="flex items-center mb-4 w-full"
+                            >
+                              <Checkbox />
+                              <TextField
+                                className="mx-4"
+                                placeholder={`${converter.toWordsOrdinal(
+                                  anwserOptionIndex + 1
+                                )} Option`}
+                                fullwidth
+                                onChange={handleChangeAnswerOption(
+                                  index,
+                                  anwserOptionIndex
+                                )}
+                              />
+                              <img
+                                className="cursor-pointer"
+                                src="/assets/icons/cross.svg"
+                                alt="cross"
+                                role="button"
+                                tabIndex={0}
+                                onClick={handleRemoveAnswerOption(
+                                  index,
+                                  answerOption.id
+                                )}
+                                onKeyPress={handleRemoveAnswerOption(
+                                  index,
+                                  answerOption.id
+                                )}
+                              />
+                            </div>
+                          )
+                        )}
                         <Button
                           className="mb-4"
                           variant="outlined"
                           color="primary"
                           fullwidth
+                          aria-label="Add new option"
+                          onKeyPress={handleAddAnswerOption(index)}
+                          onClick={handleAddAnswerOption(index)}
                         >
                           <img
                             className="mr-2"
@@ -262,27 +359,55 @@ const App = () => {
                   case 5:
                     return (
                       <>
-                        <div className="flex align-center mb-4 w-full">
-                          <span className="block text-muted">1.</span>
-                          <TextField
-                            className="mx-4"
-                            placeholder="First Option"
-                            fullwidth
-                          />
-                          <img
-                            className="cursor-pointer"
-                            src="/assets/icons/cross.svg"
-                            alt="cross"
-                            role="button"
-                            tabIndex={0}
-                          />
-                        </div>
+                        {formData[index].answerOptions.map(
+                          (
+                            answerOption: AnswerOption,
+                            anwserOptionIndex: number
+                          ) => (
+                            <div
+                              key={answerOption.id}
+                              className="flex align-center mb-4 w-full"
+                            >
+                              <span className="block text-muted">{`${
+                                anwserOptionIndex + 1
+                              }. `}</span>
+                              <TextField
+                                className="mx-4"
+                                placeholder={`${converter.toWordsOrdinal(
+                                  anwserOptionIndex + 1
+                                )} Option`}
+                                fullwidth
+                                onChange={handleChangeAnswerOption(
+                                  index,
+                                  anwserOptionIndex
+                                )}
+                              />
+                              <img
+                                className="cursor-pointer"
+                                src="/assets/icons/cross.svg"
+                                alt="cross"
+                                role="button"
+                                tabIndex={0}
+                                onClick={handleRemoveAnswerOption(
+                                  index,
+                                  answerOption.id
+                                )}
+                                onKeyPress={handleRemoveAnswerOption(
+                                  index,
+                                  answerOption.id
+                                )}
+                              />
+                            </div>
+                          )
+                        )}
                         <Button
                           className="mb-4"
                           variant="outlined"
                           color="primary"
                           fullwidth
-                          aria-label="add new option"
+                          aria-label="Add new option"
+                          onKeyPress={handleAddAnswerOption(index)}
+                          onClick={handleAddAnswerOption(index)}
                         >
                           <img
                             className="mr-2"
@@ -394,7 +519,13 @@ const options = [
 
 const defaultFormData = {
   id: uuidv4(),
-  answerType: options[0],
+  answerType: options[2],
+  answerOptions: [
+    {
+      id: uuidv4(),
+      value: "",
+    },
+  ],
 };
 
 export default App;

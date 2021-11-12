@@ -36,6 +36,11 @@ const TextField: React.FC<TextFieldProps> = ({
     props.onBlur && props.onBlur(e);
   };
 
+  const handleChange = (e: any) => {
+    setIsOnFocus(true);
+    props.onChange && props.onChange(e);
+  };
+
   return (
     <div
       className={clsx(className, "app-text-field", {
@@ -51,10 +56,12 @@ const TextField: React.FC<TextFieldProps> = ({
       >
         {startAdornment}
         <input
+          className="capitalize"
           id={customId}
           {...props}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          onChange={handleChange}
         />
         {endAdornment}
       </div>
