@@ -27,10 +27,10 @@
     position: relative;
 
     &:focus {
-      border: 2px solid $primary;
+      border: 2px solid $fueled-red;
     }
     &:checked {
-      border: 2px solid $primary;
+      border: 2px solid $fueled-red;
       &:after {
         content: "";
         position: absolute;
@@ -39,14 +39,14 @@
         width: calc(100% - 6px);
         height: calc(100% - 6px);
         border-radius: 20px;
-        background-color: $primary;
+        background-color: $fueled-red;
         transform: translate(-50%, -50%);
         transition: all 0.25s ease-in-out;
       }
     }
   }
   & label {
-    color: $text-color;
+    color: $fueled-dark-gray;
     margin-left: 0.5rem;
     cursor: pointer;
   }

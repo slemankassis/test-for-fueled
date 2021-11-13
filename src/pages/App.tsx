@@ -31,7 +31,10 @@ type Data = {
   answer: string;
 };
 
+const DEFAULT_TYPE_ANSWER = 0;
+
 const App = () => {
+  // TODO: Use useMemo or useCallback for better performance and less qty of re-render
   const [formData, setFormData] = useState<Array<Data>>([defaultFormData]);
   const [user, setUser] = useState<string | null>(null);
 
@@ -46,6 +49,7 @@ const App = () => {
   const isMultiAnswer = (data: Data) =>
     [3, 4, 5].includes(data.answerType.value as number);
 
+  // TODO: Improve this validations using onBlur inside the form and scheme validation lib like https://ajv.js.org/
   const disableAddQuestion =
     formData.length !== 0 &&
     ((formData.some((data) => isMultiAnswer(data as Data)) &&
@@ -99,7 +103,7 @@ const App = () => {
       ...formData,
       {
         id: uuidv4(),
-        answerType: options[0],
+        answerType: options[DEFAULT_TYPE_ANSWER],
         question: "",
         answers: [newAnswer],
         answer: "",
@@ -206,7 +210,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <AppBar>
-        <div className="header container flex justify-between align-center h-full">
+        <div className="header__container flex justify-between align-center h-full">
           <Link to="/">
             <img
               src="/assets/icons/logo.svg"
@@ -231,7 +235,7 @@ const App = () => {
                 aria-label="logout"
                 onClick={handleLogout}
               >
-                Logout
+                Log out
               </Button>
             ) : (
               <Button
@@ -239,7 +243,7 @@ const App = () => {
                 aria-label="login"
                 onClick={handleLogin}
               >
-                Login
+                Log in
               </Button>
             )}
           </div>
@@ -469,7 +473,7 @@ const App = () => {
               <div className="divider mb-6" />
               <div className="flex justify-between align-center">
                 <span className="main__counter text-muted">
-                  {index + 1} / {formData.length}
+                  {index + 1} of {formData.length}
                 </span>
                 <div className="flex align-center">
                   {index !== 0 && (
@@ -564,7 +568,7 @@ const options = [
 
 const defaultFormData = {
   id: uuidv4(),
-  answerType: options[2],
+  answerType: options[DEFAULT_TYPE_ANSWER],
   question: "",
   answers: [
     {

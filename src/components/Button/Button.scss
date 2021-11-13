@@ -6,7 +6,6 @@
   align-items: center;
   padding: 0.5rem;
   font-size: 0.75rem;
-  border-radius: $border-radius;
   outline: none;
   border: none;
   cursor: pointer;
@@ -15,22 +14,22 @@
   height: 2.5rem;
   text-transform: uppercase;
   &:focus {
-    border: 1px solid $primary;
+    border: 1px solid $fueled-red;
   }
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
   &--contained {
-    background-color: $primary;
-    border: 1px solid $primary;
+    background-color: $fueled-red;
+    border: 1px solid $fueled-red;
     color: $white;
   }
   &--outlined {
     border: 1px solid $outline;
   }
   &--primary {
-    color: $primary;
+    color: $fueled-red;
   }
   &--fullwidth {
     width: 100%;

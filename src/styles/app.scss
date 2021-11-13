@@ -1,6 +1,47 @@
 @import "./variables";
 
+@font-face {
+  font-family: "GT Cinetype";
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+  src: url("../fonts/GT-Cinetype-Regular.woff2") format("woff2"),
+    url("../fonts/GT-Cinetype-Regular-Trial.otf") format("otf");
+}
+@font-face {
+  font-family: "GT Cinetype";
+  font-style: italic, bold;
+  font-weight: 300;
+  font-display: auto;
+  src: url("../fonts/GT-Cinetype-Bold-Italic.woff2") format("woff2"),
+    url("../fonts/GT-Cinetype-Bold-Italic-Trial.otf") format("otf");
+}
+@font-face {
+  font-family: "GT Cinetype";
+  font-style: bold;
+  font-weight: 400;
+  font-display: auto;
+  src: url("../fonts/GT-Cinetype-Bold.woff2") format("woff2"),
+    url("../fonts/GT-Cinetype-Bold-Trial.otf") format("otf");
+}
+@font-face {
+  font-family: "GT Cinetype";
+  font-style: italic;
+  font-weight: 300;
+  font-display: auto;
+  src: url("../fonts/GT-Cinetype-Regular-Italic.woff2") format("woff2"),
+    url("../fonts/GT-Cinetype-Regular-Italic-Trial.otf") format("otf");
+}
+
+* {
+  font-family: "GT Cinetype";
+}
 .header {
+  &__container {
+    margin: 0 auto;
+    padding: 0 0.75rem;
+    width: -webkit-fill-available;
+  }
   &__input {
     border: none;
     outline: none;
@@ -16,7 +57,10 @@
     text-overflow: ellipsis;
   }
   &__button {
-    background-color: rgba($color: #f5f5f1, $alpha: 0.2);
+    background-color: rgba(245, 245, 241, 0.2);
+    height: 30px;
+    inline-size: max-content;
+    border-radius: 0;
   }
 }
 .main {
@@ -24,10 +68,12 @@
     color: #f5f5f1;
     opacity: 0.72;
     display: block;
-    margin-right: 2rem;
+    margin-right: 1.5rem;
     @media screen and (max-width: 425px) {
       display: none;
     }
+    font-weight: 400;
+    font-size: 12px;
   }
   &__action-icon {
     cursor: pointer;
@@ -40,7 +86,6 @@
 .card {
   padding: 1.5rem;
   background-color: $white;
-  border-radius: $border-radius;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
 }
 .divider {
@@ -48,7 +93,7 @@
   height: 1px;
 }
 .container {
-  max-width: 1152px;
+  max-width: 712px;
   margin: 0 auto;
   padding: 0 0.75rem;
 }
@@ -77,7 +122,7 @@
   width: 100%;
 }
 .text-primary {
-  color: $primary;
+  color: $fueled-red;
 }
 .text-white {
   color: $white;

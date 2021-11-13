@@ -23,7 +23,7 @@
     padding: 0px 1rem;
 
     &--focus {
-      border-color: $primary;
+      border-color: $fueled-red;
     }
 
     input {
@@ -36,7 +36,7 @@
 
       &:read-only,
       &:disabled {
-        background-color: rgba($color: #000000, $alpha: 0.4);
+        background-color: rgba($color: $black, $alpha: 0.4);
       }
     }
   }
