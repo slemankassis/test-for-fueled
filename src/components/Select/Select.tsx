@@ -50,17 +50,20 @@ const Select: React.FC<SelectProps> = ({
       style={style}
     >
       <label>{label}</label>
-      <Dropdown title={selected?.label || (children as string)} fullwidth>
+      <Dropdown
+        title={selected?.label || (children as string)}
+        fullwidth
+      >
         {options.map((item, index) => (
-          <li
+          <button
             onClick={handleSelectOption(item)}
             onKeyPress={handleSelectOption(item)}
+            aria-label={item.label}
             tabIndex={0}
-            role="button"
             key={index}
           >
             {item.label}
-          </li>
+          </button>
         ))}
       </Dropdown>
     </div>

@@ -155,9 +155,9 @@ const App = () => {
       setFormDataItemAnswerOption(index, anwserOptionIndex, value);
     };
 
-  const updateRadioChecked = (index: number) => {
+  const updateRadioChecked = (index: number, anwserOptionIndex: number) => {
     const answerOptionChecked = document.querySelector(
-      `input[name="answer-radio-${index}"]:checked`
+      `input[name="answer-radio-${index}-${anwserOptionIndex}"]:checked`
     )?.id;
   };
 
@@ -214,19 +214,20 @@ const App = () => {
           <Link to="/">
             <img
               src="/assets/icons/logo.svg"
-              alt="logo"
+              alt="Go home"
               tabIndex={0}
-              role="link"
               aria-label="Home"
             />
           </Link>
-          <input
-            className="header__input"
-            type="text"
-            defaultValue="New Questionnaire"
-            aria-label="Title field"
-            required
-          />
+          <h1>
+            <input
+              className="header__input"
+              type="text"
+              defaultValue="New Questionnaire"
+              aria-label="Title field"
+              required
+            />
+          </h1>
           <div className="flex align-center">
             {user && <span className="main__user">{user}</span>}
             {user ? (
@@ -314,15 +315,17 @@ const App = () => {
                               className="flex items-center mb-4 w-full"
                             >
                               <Radio
-                                name={`answer-radio-${index}`}
+                                name={`answer-radio-${index}-${anwserOptionIndex}`}
                                 onChange={() => {
-                                  updateRadioChecked(anwserOptionIndex);
+                                  updateRadioChecked(index, anwserOptionIndex);
                                   handleChangeAnswerOption(
                                     index,
                                     anwserOptionIndex
                                   );
                                 }}
                                 required
+                                aria-label="Mark answer as correct"
+                                aria-checked={answerOption.checked}
                                 disabled={!answerOption.value}
                                 // form="answer-form"
                               />
@@ -332,7 +335,11 @@ const App = () => {
                                   anwserOptionIndex + 1
                                 )} Option`}
                                 fullwidth
+                                name={`answer-radio-textfield-${index}-${anwserOptionIndex}`}
                                 required
+                                aria-label={`Write the ${converter.toWordsOrdinal(
+                                  anwserOptionIndex + 1
+                                )} Option`}
                                 value={answerOption.value}
                                 onChange={handleChangeAnswerOption(
                                   index,
@@ -366,11 +373,13 @@ const App = () => {
                               className="flex items-center mb-4 w-full"
                             >
                               <Checkbox
-                                name="answer"
+                                name={`answer-checkbox-${index}-${anwserOptionIndex}`}
                                 onChange={handleChangeAnswerOption(
                                   index,
                                   anwserOptionIndex
                                 )}
+                                aria-label="Mark answer as correct"
+                                aria-checked={answerOption.checked}
                                 required
                                 disabled={!answerOption.value}
                               />
@@ -380,6 +389,10 @@ const App = () => {
                                   anwserOptionIndex + 1
                                 )} Option`}
                                 fullwidth
+                                name={`answer-checkbox-textfield-${index}-${anwserOptionIndex}`}
+                                aria-label={`Write the ${converter.toWordsOrdinal(
+                                  anwserOptionIndex + 1
+                                )} Option`}
                                 required
                                 value={answerOption.value}
                                 onChange={handleChangeAnswerOption(

@@ -27,7 +27,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
       })}
       style={style}
     >
-      <input id={customId} {...props} type="checkbox" role="checkbox" />
+      <input id={customId} {...props} type="checkbox" role="checkbox" aria-checked/>
       {label && <label htmlFor={customId}>{label}</label>}
     </div>
   );
