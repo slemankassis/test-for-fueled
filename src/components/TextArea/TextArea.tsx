@@ -23,9 +23,7 @@ const TextArea: React.FC<TextAreaProps> = ({
 
   return (
     <div
-      className={clsx({
-        [className]: true,
-        "app-text-area": true,
+      className={clsx(className, "app-text-area", {
         "app-text-area--fullwidth": fullwidth,
       })}
       style={style}

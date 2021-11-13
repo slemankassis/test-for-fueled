@@ -44,22 +44,20 @@ const Select: React.FC<SelectProps> = ({
 
   return (
     <div
-      className={clsx({
-        "app-select": true,
+      className={clsx("app-select", className, {
         "app-select--fullwidth": fullwidth,
-        [className]: true,
       })}
       style={style}
     >
       <label>{label}</label>
       <Dropdown title={selected?.label || (children as string)} fullwidth>
-        {options.map((item, ind) => (
+        {options.map((item, index) => (
           <li
             onClick={handleSelectOption(item)}
             onKeyPress={handleSelectOption(item)}
             tabIndex={0}
             role="button"
-            key={ind}
+            key={index}
           >
             {item.label}
           </li>

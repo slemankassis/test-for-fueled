@@ -5,6 +5,7 @@ import AppBar from "src/components/AppBar/AppBar";
 import Button from "src/components/Button/Button";
 import Checkbox from "src/components/Checkbox/Checkbox";
 import Radio from "src/components/Radio/Radio";
+import RemoveButton from "src/components/RemoveButton/RemoveButton";
 import Select from "src/components/Select/Select";
 import TextArea from "src/components/TextArea/TextArea";
 import TextField from "src/components/TextField/TextField";
@@ -16,24 +17,68 @@ type Option = {
   value: string | number;
 };
 
-type AnswerOption = {
+type Answer = {
   id: string;
   value: string | number;
+  checked?: boolean;
+};
+
+type Data = {
+  id: string;
+  question: string;
+  answerType: Option;
+  answers: Array<Answer>;
+  answer: string;
 };
 
 const App = () => {
-  const [formData, setFormData] = useState<any[]>([defaultFormData]);
+  const [formData, setFormData] = useState<Array<Data>>([defaultFormData]);
   const [user, setUser] = useState<string | null>(null);
 
-  console.log(formData, "formData");
+  console.log(formData[0], "formData");
+
+  const atLeastOneAnswerOptionIsChecked = () => {
+    const answers = Array.from(document.getElementsByName("answer"));
+
+    return answers.reduce((acc, curr: any) => acc || curr.checked, false);
+  };
+
+  const isMultiAnswer = (data: Data) =>
+    [3, 4, 5].includes(data.answerType.value as number);
+
+  const disableAddQuestion =
+    formData.length !== 0 &&
+    ((formData.some((data) => isMultiAnswer(data as Data)) &&
+      !atLeastOneAnswerOptionIsChecked()) ||
+      formData.some((data) => !data.question) ||
+      formData.some((data) => data.answers.length <= 1) ||
+      (formData.some((data) => !isMultiAnswer(data as Data)) &&
+        formData.some((data) => !data.question)) ||
+      formData.some((data) => !data.answer));
+
+  const disableFinalSubmit = !disableAddQuestion || !formData.length;
+
+  const newAnswer = {
+    id: uuidv4(),
+    value: "",
+    checked: false,
+  };
 
   const setFormDataItem = (
     index: number,
     name: string,
     value: string | Option
   ) => {
-    const temp = [...formData];
+    const temp = [...formData] as any;
+
+    if (isMultiAnswer(temp[index])) {
+      temp[index].answer = "";
+    } else {
+      temp[index].answers = [newAnswer];
+    }
+
     temp[index][name] = value;
+
     setFormData(temp);
   };
 
@@ -55,7 +100,10 @@ const App = () => {
       {
         id: uuidv4(),
         answerType: options[0],
-      },
+        question: "",
+        answers: [newAnswer],
+        answer: "",
+      } as Data,
     ]);
   };
 
@@ -66,50 +114,56 @@ const App = () => {
   const setFormDataItemAnswerOption = (
     index: number,
     anwserOptionIndex: number,
-    value: string
+    value: string | boolean
   ) => {
-    const temp = [...formData];
+    const temp = [...formData] as any;
 
-    temp[index].answerOptions[anwserOptionIndex].value = value;
+    temp[index].answers[anwserOptionIndex][
+      `${"boolean" === typeof value ? "checked" : "value"}`
+    ] = value;
+
     setFormData(temp);
   };
-
-  const handleChangeAnswerOption =
-    (index: number, anwserOptionIndex: number) =>
-    ({
-      target: { value },
-    }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setFormDataItemAnswerOption(index, anwserOptionIndex, value);
-    };
 
   const handleAddAnswerOption = (index: number) => () => {
     const temp = [...formData];
-    temp[index].answerOptions.push({
+
+    temp[index].answers.push({
       id: uuidv4(),
       value: "",
-    });
+      checked: false,
+    } as Answer);
+
     setFormData(temp);
   };
 
-  const setAnswerOption = (
-    index: number,
-    name: string,
-    value: string | Option
-  ) => {
-    const temp = [...formData];
-    temp[index][name] = value;
-    setFormData(temp);
+  // const handleSubmitAnswerForm = ({ target: { name, value } }: any) => {
+  //   console.log(name, value, 8888);
+  // };
+
+  const handleChangeAnswerOption =
+    (index: number, anwserOptionIndex: number) =>
+    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const value = ["checkbox", "radio"].includes(e.currentTarget.type)
+        ? (e.currentTarget as HTMLInputElement).checked
+        : e.currentTarget.value;
+
+      setFormDataItemAnswerOption(index, anwserOptionIndex, value);
+    };
+
+  const updateRadioChecked = (index: number) => {
+    const answerOptionChecked = document.querySelector(
+      `input[name="answer-radio-${index}"]:checked`
+    )?.id;
   };
 
   const handleRemoveAnswerOption = (index: number, id: string) => () => {
     const temp = [...formData];
-    const tempAnswerOptions = [
-      ...formData[index].answerOptions.filter(
-        (data: AnswerOption) => data.id !== id
-      ),
+    const tempAnswer = [
+      ...formData[index].answers.filter((data: Answer) => data.id !== id),
     ];
 
-    temp[index].answerOptions = tempAnswerOptions;
+    temp[index].answers = tempAnswer;
     setFormData(temp);
   };
 
@@ -118,11 +172,13 @@ const App = () => {
       const temp = [...formData];
       temp[index] = formData[index + 1];
       temp[index + 1] = formData[index];
+
       setFormData(temp);
     } else {
       const temp = [...formData];
       temp[index] = formData[index - 1];
       temp[index - 1] = formData[index];
+
       setFormData(temp);
     }
   };
@@ -131,7 +187,7 @@ const App = () => {
     event.preventDefault();
     const temp = [...formData];
 
-    console.log(
+    console.info(
       temp.map(({ answerType, ...data }) => {
         return data;
       })
@@ -140,8 +196,9 @@ const App = () => {
   };
 
   const handleLogin = async () => {
-    setUser("mock@gmail.com");
+    setUser("tom@fueled.com");
   };
+
   const handleLogout = async () => {
     setUser(null);
   };
@@ -164,6 +221,7 @@ const App = () => {
             type="text"
             defaultValue="New Questionnaire"
             aria-label="Title field"
+            required
           />
           <div className="flex align-center">
             {user && <span className="main__user">{user}</span>}
@@ -188,15 +246,19 @@ const App = () => {
         </div>
       </AppBar>
       <main className="main container mt-8">
-        <form onSubmit={handleSubmit}>
+        {/* TODO: Make differents forms for each question and each answer of a question
+         */}
+        {/* <form id="answer-form" onBlur={validateForm} /> */}
+        <form id="question-form" onSubmit={handleSubmit}>
           {formData.map((data, index) => (
             <div className="card mb-8" key={data.id}>
               <TextField
                 className="mb-4"
                 name="question"
                 label="Question"
-                placeholder="Lorem ipsum dolor sit amet?"
+                placeholder="What do you want to ask?"
                 aria-label="question"
+                autoComplete="off"
                 fullwidth
                 onChange={handleChange(index)}
               />
@@ -219,58 +281,68 @@ const App = () => {
                     return (
                       <TextField
                         className="mb-4"
-                        name="short_answer"
+                        name="answer"
                         placeholder="Short Answer Text"
                         aria-label="Short Answer"
                         fullwidth
+                        value={data.answer}
                         onChange={handleChange(index)}
                       />
                     );
                   case 2:
                     return (
                       <TextArea
-                        name="long_answer"
+                        name="answer"
                         placeholder="Long Answer Text"
                         fullwidth
-                        aria-label="long answer"
+                        aria-label="Long answer"
+                        value={data.answer}
                         onChange={handleChange(index)}
                       />
                     );
                   case 3:
                     return (
                       <>
-                        {formData[index].answerOptions.map(
-                          (
-                            answerOption: AnswerOption,
-                            anwserOptionIndex: number
-                          ) => (
+                        {formData[index].answers.map(
+                          (answerOption: Answer, anwserOptionIndex: number) => (
                             <div
                               key={answerOption.id}
                               className="flex items-center mb-4 w-full"
                             >
-                              <Radio name="radio-name" />
+                              <Radio
+                                name={`answer-radio-${index}`}
+                                onChange={() => {
+                                  updateRadioChecked(anwserOptionIndex);
+                                  handleChangeAnswerOption(
+                                    index,
+                                    anwserOptionIndex
+                                  );
+                                }}
+                                required
+                                disabled={!answerOption.value}
+                                // form="answer-form"
+                              />
                               <TextField
                                 className="mx-4"
                                 placeholder={`${converter.toWordsOrdinal(
                                   anwserOptionIndex + 1
                                 )} Option`}
                                 fullwidth
+                                required
+                                value={answerOption.value}
                                 onChange={handleChangeAnswerOption(
                                   index,
                                   anwserOptionIndex
                                 )}
+                                // form="answer-form"
                               />
-                              <img
-                                className="cursor-pointer"
-                                src="/assets/icons/cross.svg"
-                                alt="cross"
-                                role="button"
-                                tabIndex={0}
-                                onClick={handleRemoveAnswerOption(
+
+                              <RemoveButton
+                                handleClick={handleRemoveAnswerOption(
                                   index,
                                   answerOption.id
                                 )}
-                                onKeyPress={handleRemoveAnswerOption(
+                                handleKeyPress={handleRemoveAnswerOption(
                                   index,
                                   answerOption.id
                                 )}
@@ -278,59 +350,46 @@ const App = () => {
                             </div>
                           )
                         )}
-                        <Button
-                          className="mb-4"
-                          variant="outlined"
-                          color="primary"
-                          fullwidth
-                          aria-label="Add new option"
-                          onKeyPress={handleAddAnswerOption(index)}
-                          onClick={handleAddAnswerOption(index)}
-                        >
-                          <img
-                            className="mr-2"
-                            src="/assets/icons/plus.svg"
-                            alt="plus"
-                          />
-                          <span>Add Option</span>
-                        </Button>
                       </>
                     );
                   case 4:
                     return (
                       <>
-                        {formData[index].answerOptions.map(
-                          (
-                            answerOption: AnswerOption,
-                            anwserOptionIndex: number
-                          ) => (
+                        {formData[index].answers.map(
+                          (answerOption: Answer, anwserOptionIndex: number) => (
                             <div
                               key={answerOption.id}
                               className="flex items-center mb-4 w-full"
                             >
-                              <Checkbox />
+                              <Checkbox
+                                name="answer"
+                                onChange={handleChangeAnswerOption(
+                                  index,
+                                  anwserOptionIndex
+                                )}
+                                required
+                                disabled={!answerOption.value}
+                              />
                               <TextField
                                 className="mx-4"
                                 placeholder={`${converter.toWordsOrdinal(
                                   anwserOptionIndex + 1
                                 )} Option`}
                                 fullwidth
+                                required
+                                value={answerOption.value}
                                 onChange={handleChangeAnswerOption(
                                   index,
                                   anwserOptionIndex
                                 )}
                               />
-                              <img
-                                className="cursor-pointer"
-                                src="/assets/icons/cross.svg"
-                                alt="cross"
-                                role="button"
-                                tabIndex={0}
-                                onClick={handleRemoveAnswerOption(
+
+                              <RemoveButton
+                                handleClick={handleRemoveAnswerOption(
                                   index,
                                   answerOption.id
                                 )}
-                                onKeyPress={handleRemoveAnswerOption(
+                                handleKeyPress={handleRemoveAnswerOption(
                                   index,
                                   answerOption.id
                                 )}
@@ -338,32 +397,13 @@ const App = () => {
                             </div>
                           )
                         )}
-                        <Button
-                          className="mb-4"
-                          variant="outlined"
-                          color="primary"
-                          fullwidth
-                          aria-label="Add new option"
-                          onKeyPress={handleAddAnswerOption(index)}
-                          onClick={handleAddAnswerOption(index)}
-                        >
-                          <img
-                            className="mr-2"
-                            src="/assets/icons/plus.svg"
-                            alt="plus"
-                          />
-                          <span>Add Option</span>
-                        </Button>
                       </>
                     );
                   case 5:
                     return (
                       <>
-                        {formData[index].answerOptions.map(
-                          (
-                            answerOption: AnswerOption,
-                            anwserOptionIndex: number
-                          ) => (
+                        {formData[index].answers.map(
+                          (answerOption: Answer, anwserOptionIndex: number) => (
                             <div
                               key={answerOption.id}
                               className="flex align-center mb-4 w-full"
@@ -371,28 +411,27 @@ const App = () => {
                               <span className="block text-muted">{`${
                                 anwserOptionIndex + 1
                               }. `}</span>
+
                               <TextField
                                 className="mx-4"
                                 placeholder={`${converter.toWordsOrdinal(
                                   anwserOptionIndex + 1
                                 )} Option`}
                                 fullwidth
+                                required
+                                value={answerOption.value}
                                 onChange={handleChangeAnswerOption(
                                   index,
                                   anwserOptionIndex
                                 )}
                               />
-                              <img
-                                className="cursor-pointer"
-                                src="/assets/icons/cross.svg"
-                                alt="cross"
-                                role="button"
-                                tabIndex={0}
-                                onClick={handleRemoveAnswerOption(
+
+                              <RemoveButton
+                                handleClick={handleRemoveAnswerOption(
                                   index,
                                   answerOption.id
                                 )}
-                                onKeyPress={handleRemoveAnswerOption(
+                                handleKeyPress={handleRemoveAnswerOption(
                                   index,
                                   answerOption.id
                                 )}
@@ -400,26 +439,32 @@ const App = () => {
                             </div>
                           )
                         )}
-                        <Button
-                          className="mb-4"
-                          variant="outlined"
-                          color="primary"
-                          fullwidth
-                          aria-label="Add new option"
-                          onKeyPress={handleAddAnswerOption(index)}
-                          onClick={handleAddAnswerOption(index)}
-                        >
-                          <img
-                            className="mr-2"
-                            src="/assets/icons/plus.svg"
-                            alt="plus"
-                          />
-                          <span>Add Option</span>
-                        </Button>
                       </>
                     );
                 }
               })()}
+
+              {isMultiAnswer(formData[index]) && (
+                <Button
+                  className="mb-4"
+                  variant="outlined"
+                  color="primary"
+                  fullwidth
+                  disabled={formData[index].answers.some(
+                    (answerOption: Answer) => !answerOption.value
+                  )}
+                  aria-label="Add new option"
+                  onKeyPress={handleAddAnswerOption(index)}
+                  onClick={handleAddAnswerOption(index)}
+                >
+                  <img
+                    className="mr-2"
+                    src="/assets/icons/plus.svg"
+                    alt="plus"
+                  />
+                  <span>Add Option</span>
+                </Button>
+              )}
 
               <div className="divider mb-6" />
               <div className="flex justify-between align-center">
@@ -471,7 +516,7 @@ const App = () => {
             color="primary"
             fullwidth
             aria-label="add question"
-            disabled={formData.some((data) => !data.question)}
+            disabled={!disableAddQuestion}
             onClick={handleAddQuestion}
             onKeyPress={handleAddQuestion}
           >
@@ -483,7 +528,7 @@ const App = () => {
             variant="contained"
             type="submit"
             aria-label="submit form"
-            disabled={formData.some((data) => !data.question)}
+            disabled={disableFinalSubmit}
             fullwidth
           >
             Save & Share
@@ -520,12 +565,14 @@ const options = [
 const defaultFormData = {
   id: uuidv4(),
   answerType: options[2],
-  answerOptions: [
+  question: "",
+  answers: [
     {
       id: uuidv4(),
       value: "",
     },
   ],
+  answer: "",
 };
 
 export default App;
