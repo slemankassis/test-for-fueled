@@ -50,6 +50,7 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 ![image](https://user-images.githubusercontent.com/5224903/141674818-7efda7a6-c47d-4632-bac4-38193b0931ab.png)
 
 
+![image](https://user-images.githubusercontent.com/5224903/141675019-5f110ec5-ec27-4dd7-a001-4582cd2a3841.png)
 
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
