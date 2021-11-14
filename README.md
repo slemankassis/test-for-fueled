@@ -1,7 +1,5 @@
 # Test for Fueled
 
-Just for let you know I did the other type questions too. I know, the instructions say only do the short answer type but I enjoyed the activity and I wanna the position and the visa :P
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -141,6 +139,9 @@ In the following demo we will observe the following:
 1. NVDIA, JAWS
 
 2. Test of the site in Android Emulator Chrome
+
+
+__Just for let you know I did the other type questions too. I know, the instructions say only do the short answer type but I enjoyed the activity and I wanna the position and the visa :P__
 
 #### Text spacing script
 
