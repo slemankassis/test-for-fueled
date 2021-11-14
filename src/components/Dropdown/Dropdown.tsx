@@ -25,6 +25,7 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      // TODO: Remove event.keyCode because is deprecated https://www.w3.org/TR/2015/WD-uievents-20150319/#h-dictionary-keyboardeventinit-members
       const key = event.key || event.keyCode;
       if (key === "Escape" || key === "Esc" || key === 27) {
         setOpen(false);
@@ -38,6 +39,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     };
   }, []);
 
+  // TODO: Fix styles of the dropdown after the change from <li> to <button> caused by fixes a11y
   return (
     <div
       className={clsx("app-dropdown", className, {

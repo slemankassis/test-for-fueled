@@ -2,7 +2,12 @@
 
 .app-select {
   display: inline-block;
-  min-width: 270px;
+  @media screen and (min-width: 336px) {
+    min-width: 271px;
+  }
+  @media screen and (max-width: 336px) {
+    min-width: -webkit-fill-available;
+  }
   &--fullwidth {
     width: 100%;
   }
@@ -12,7 +17,7 @@
     margin-bottom: 0.375rem;
     display: block;
   }
-  li {
+  button {
     padding: 0.5rem;
     list-style: none;
     cursor: pointer;

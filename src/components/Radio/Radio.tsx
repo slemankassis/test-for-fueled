@@ -20,6 +20,7 @@ const Radio: React.FC<RadioProps> = ({
   const customIdRef = useRef(id || uuidv4());
   const customId = customIdRef.current;
 
+  // TODO: Make this component focusable and add ful keyboard suppport because isn't allowed to do changes with keyboard navigation https://www.w3.org/TR/wai-aria-practices/examples/radio/radio-1/radio-1.html
   return (
     <div
       className={clsx(className, "app-radio", {

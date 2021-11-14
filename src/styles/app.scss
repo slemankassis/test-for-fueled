@@ -1,10 +1,12 @@
 @import "./variables";
 
+// TODO: Move font loading in a new file
 @font-face {
   font-family: "GT Cinetype";
   font-style: normal;
   font-weight: 400;
   font-display: auto;
+  // TODO: Add font imports for old browsers compatibility
   src: url("../fonts/GT-Cinetype-Regular.woff2") format("woff2"),
     url("../fonts/GT-Cinetype-Regular-Trial.otf") format("otf");
 }
@@ -40,21 +42,21 @@
   &__container {
     margin: 0 auto;
     padding: 0 0.75rem;
-    width: -webkit-fill-available;
   }
   &__input {
-    border: none;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     outline: none;
-    font-weight: 700;
-    font-size: 22px;
+    min-width: 0px;
+    padding: 1rem 1rem;
+    color: $white;
     background-color: transparent;
     text-align: center;
-    color: $white;
-    min-width: 0px;
-    padding: 0px 1rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 22px;
+    font-weight: 700;
+    border: none;
+    max-width: -webkit-fill-available;
   }
   &__button {
     background-color: rgba(245, 245, 241, 0.2);

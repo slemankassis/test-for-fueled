@@ -58,6 +58,7 @@ const TextField: React.FC<TextFieldProps> = ({
         <input
           className="capitalize"
           id={customId}
+          type="text"
           {...props}
           onFocus={handleFocus}
           onBlur={handleBlur}

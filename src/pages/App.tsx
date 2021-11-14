@@ -12,6 +12,10 @@ import TextField from "src/components/TextField/TextField";
 import { v4 as uuidv4 } from "uuid";
 import "../styles/app.scss";
 
+// TODO: Move consts and types to a misc folder
+
+const DEFAULT_TYPE_ANSWER = 0;
+
 type Option = {
   label: string;
   value: string | number;
@@ -27,15 +31,15 @@ type Data = {
   id: string;
   question: string;
   answerType: Option;
+  // TODO: Isn't clear, try to use only answer: string | Array<Answer>
   answers: Array<Answer>;
   answer: string;
 };
 
-const DEFAULT_TYPE_ANSWER = 0;
-
 const App = () => {
   // TODO: Use useMemo or useCallback for better performance and less qty of re-render
   const [formData, setFormData] = useState<Array<Data>>([defaultFormData]);
+  const [title, setTitle] = useState<string>("New Questionnaire");
   const [user, setUser] = useState<string | null>(null);
 
   console.log(formData[0], "formData");
@@ -49,7 +53,7 @@ const App = () => {
   const isMultiAnswer = (data: Data) =>
     [3, 4, 5].includes(data.answerType.value as number);
 
-  // TODO: Improve this validations using onBlur inside the form and scheme validation lib like https://ajv.js.org/
+  // TODO: Improve this validations using onBlur inside the form and scheme validation lib https://ajv.js.org/
   const disableAddQuestion =
     formData.length !== 0 &&
     ((formData.some((data) => isMultiAnswer(data as Data)) &&
@@ -121,7 +125,6 @@ const App = () => {
     value: string | boolean
   ) => {
     const temp = [...formData] as any;
-
     temp[index].answers[anwserOptionIndex][
       `${"boolean" === typeof value ? "checked" : "value"}`
     ] = value;
@@ -141,10 +144,6 @@ const App = () => {
     setFormData(temp);
   };
 
-  // const handleSubmitAnswerForm = ({ target: { name, value } }: any) => {
-  //   console.log(name, value, 8888);
-  // };
-
   const handleChangeAnswerOption =
     (index: number, anwserOptionIndex: number) =>
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -155,6 +154,7 @@ const App = () => {
       setFormDataItemAnswerOption(index, anwserOptionIndex, value);
     };
 
+  // TODO: Fix and improve checking the check values and fill dataForm correctly
   const updateRadioChecked = (index: number, anwserOptionIndex: number) => {
     const answerOptionChecked = document.querySelector(
       `input[name="answer-radio-${index}-${anwserOptionIndex}"]:checked`
@@ -187,6 +187,7 @@ const App = () => {
     }
   };
 
+  // TODO: Use `Array.prototype.reduce` to filter empty answers (`answer.value === ''`) and show checked radio values correctly. Also, remove `answer` if `isMultiAnswer(data) === true` or remove `answers` otherwise keeping just `answer`.
   const handleSubmit = (event: any) => {
     event.preventDefault();
     const temp = [...formData];
@@ -207,10 +208,16 @@ const App = () => {
     setUser(null);
   };
 
+  const handleChangeTitle = ({
+    target: { value },
+  }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setTitle(value);
+  };
+
   return (
     <BrowserRouter>
       <AppBar>
-        <div className="header__container flex justify-between align-center h-full">
+        <h1 className="header__container flex justify-between align-center h-full">
           <Link to="/">
             <img
               src="/assets/icons/logo.svg"
@@ -219,15 +226,14 @@ const App = () => {
               aria-label="Home"
             />
           </Link>
-          <h1>
-            <input
-              className="header__input"
-              type="text"
-              defaultValue="New Questionnaire"
-              aria-label="Title field"
-              required
-            />
-          </h1>
+          <input
+            className="header__input"
+            type="text"
+            defaultValue={title}
+            aria-label="Title field"
+            onChange={handleChangeTitle}
+            required
+          />
           <div className="flex align-center">
             {user && <span className="main__user">{user}</span>}
             {user ? (
@@ -248,10 +254,10 @@ const App = () => {
               </Button>
             )}
           </div>
-        </div>
+        </h1>
       </AppBar>
       <main className="main container mt-8">
-        {/* TODO: Make differents forms for each question and each answer of a question
+        {/* TODO: Build differents forms for each question and each answer of a question
          */}
         {/* <form id="answer-form" onBlur={validateForm} /> */}
         <form id="question-form" onSubmit={handleSubmit}>
@@ -280,6 +286,7 @@ const App = () => {
               </Select>
 
               {(() => {
+                // TODO: Move each case to a new component and build a generic component when isMultiAnswer
                 switch (data.answerType.value) {
                   default:
                   case 1:
@@ -587,6 +594,7 @@ const defaultFormData = {
     {
       id: uuidv4(),
       value: "",
+      checked: false,
     },
   ],
   answer: "",
