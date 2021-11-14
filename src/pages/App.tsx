@@ -53,18 +53,19 @@ const App = () => {
   const isMultiAnswer = (data: Data) =>
     [3, 4, 5].includes(data.answerType.value as number);
 
-  // TODO: Improve this validations using onBlur inside the form and scheme validation lib https://ajv.js.org/
+  // TODO: Improve this validations using onBlur inside the form and scheme validation lib https://ajv.js.org/. Also, review the other type questions because don't have expected behaviour. Avoid using some and nested conjunctions and disjunctions.
   const disableAddQuestion =
-    formData.length !== 0 &&
-    ((formData.some((data) => isMultiAnswer(data as Data)) &&
-      !atLeastOneAnswerOptionIsChecked()) ||
-      formData.some((data) => !data.question) ||
-      formData.some((data) => data.answers.length <= 1) ||
-      (formData.some((data) => !isMultiAnswer(data as Data)) &&
-        formData.some((data) => !data.question)) ||
-      formData.some((data) => !data.answer));
+    formData.length !== 0
+      ? (formData.some((data) => isMultiAnswer(data as Data)) &&
+          !atLeastOneAnswerOptionIsChecked()) ||
+        formData.some((data) => !data.question) ||
+        (formData.some((data) => data.answers.length <= 1) &&
+          formData.some((data) => !isMultiAnswer(data as Data)) &&
+          formData.some((data) => !data.question)) ||
+        formData.some((data) => !data.answer)
+      : false;
 
-  const disableFinalSubmit = !disableAddQuestion || !formData.length;
+  const disableFinalSubmit = disableAddQuestion || !formData.length;
 
   const newAnswer = {
     id: uuidv4(),
@@ -79,6 +80,7 @@ const App = () => {
   ) => {
     const temp = [...formData] as any;
 
+    // Remove the answers of the other question type
     if (isMultiAnswer(temp[index])) {
       temp[index].answer = "";
     } else {
@@ -194,7 +196,7 @@ const App = () => {
 
     console.info(
       temp.map(({ answerType, ...data }) => {
-        return data;
+        return { title, data };
       })
     );
     alert("Submitted");
@@ -540,7 +542,7 @@ const App = () => {
             color="primary"
             fullwidth
             aria-label="add question"
-            disabled={!disableAddQuestion}
+            disabled={disableAddQuestion}
             onClick={handleAddQuestion}
             onKeyPress={handleAddQuestion}
           >
